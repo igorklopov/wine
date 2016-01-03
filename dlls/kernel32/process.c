@@ -1574,6 +1574,10 @@ static int fork_and_exec( const char *filename, const WCHAR *cmdline, const WCHA
             _exit(1);
         }
 
+        do {
+            err = waitpid(pid, NULL, 0);
+        } while (err < 0 && errno == EINTR);
+
         _exit(0); /* child if fork succeeded */
     }
     HeapFree( GetProcessHeap(), 0, argv );
